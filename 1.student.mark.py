@@ -74,7 +74,8 @@ def list_students(l_student):
         for i in  l_student:
             print(i)
 
-def sh_student_mark(x,show):
+def sh_student_mark(x):
+    show=[]
     print("Marked subject")
     mk_s = []
     for i in x:
@@ -95,10 +96,11 @@ def sh_student_mark(x,show):
 
 
 #Variable
-
+ #List of Students
 l_student = []
+ #List of Courses
 l_course = []
-show = []
+ #List of mark
 mark_list = []
 
 #UI
@@ -150,7 +152,7 @@ if __name__ == '__main__':
             list_students(l_student)
         if i==8:
             try:
-                sh_student_mark(x, show)
+                sh_student_mark(x)
             except:
                 print("You havent mark anyone")
 
