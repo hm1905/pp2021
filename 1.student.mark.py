@@ -27,7 +27,8 @@ def course_info(l_course, number_c):
 
 def student_mark(l_student, l_course, mark_list):
     print("Available Courses: ")
-    print(l_course)
+    for i in l_course:
+        print(i)
     c_name = input("Please select one to enter mark<by name>: ")
     while not any(i['name'] == c_name for i in l_course):
         print("Please try again: ")
@@ -36,7 +37,8 @@ def student_mark(l_student, l_course, mark_list):
     count = 0
     while i == str(1):
         print("Student list: ")
-        print(l_student)
+        for i in l_student:
+            print(i)
         s_name = input("Please select which student to mark<by name>: ")
         while not any(i['name'] == s_name for i in l_student):
             print("Please try again: ")
