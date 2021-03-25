@@ -104,6 +104,7 @@ if __name__ == '__main__':
     while i != 9:
         print(" ")
         print("Finished option: ")
+        op.sort()
         print(op)
         print("Recommend order from 1 to 8")
         print("""
