@@ -67,21 +67,21 @@ def list_students(l_student):
     for i in  l_student:
         print(i)
 
-def sh_student_mark(x):
+def sh_student_mark(mark_list):
     show=[]
     print("Marked subject")
     mk_s = []
-    for i in x:
+    for i in mark_list:
         if i['Subject'] not in mk_s:
             mk_s.append(i['Subject'])
     print(mk_s)
     name = input("Please select which subject you want to see: ")
     print(" ")
-    while not any(i['Subject'] == name for i in x):
+    while not any(i['Subject'] == name for i in mark_list):
         print("Please try again. You might havent marked "+ name +" yet")
         name = input("Please select which subject you want to see: ")
         print(" ")
-    for i in x:
+    for i in mark_list:
         if i['Subject'] == name:
             show.append({'Name': i['Name'], 'Mark': i['Mark']})
     for i in show:
@@ -150,7 +150,7 @@ if __name__ == '__main__':
             if l_course == [] or l_student == []:
                 print("Not enough information about students or courses was given please try again")
             else:
-                x=student_mark(l_student, l_course, mark_list)
+                student_mark(l_student, l_course, mark_list)
                 if i not in op:
                     op.append(i)
         if i==6:
@@ -168,9 +168,9 @@ if __name__ == '__main__':
                 if i not in op:
                     op.append(i)
         if i==8:
-            try:
-                sh_student_mark(x)
+            if mark_list == []:
+                print("You havent marked anyone!")
+            else:
+                sh_student_mark(mark_list)
                 if i not in op:
                     op.append(i)
-            except:
-                print("You havent mark anyone")
