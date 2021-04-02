@@ -6,7 +6,6 @@ class Student:
     def __init__(self, number_s):
         self.number_s = number_s
 
-    # overriding abstract method
     def information(self):
         for i in range(1, self.number_s + 1):
             info_s = {'id': input("Please enter student id: "),
@@ -15,7 +14,6 @@ class Student:
             self.l_student.append(info_s)
         return self.l_student
 
-    # overriding abstract method
     def show_info(self):
         if self.l_student == []:
             print("No information about students was given")
@@ -127,7 +125,7 @@ def no_course():
     return course_no
 
 
-if __name__ == '__main__':
+def main():
     i = None
     op = []
     while i != 9:
@@ -197,3 +195,10 @@ if __name__ == '__main__':
                 op.append(i)
             except:
                 print("You havent marked anyone!")
+
+        if i == 9:
+            print("Goodbye")
+
+
+if __name__ == '__main__':
+    main()
