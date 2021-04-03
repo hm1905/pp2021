@@ -1,50 +1,90 @@
+# VARIABLES.
+l_course = []
+l_student = []
+
 # CLASS CREATION
 
-class Student:
-    l_student = []
 
-    def __init__(self, number_s):
-        self.number_s = number_s
+class Program:
+    def __init__(self):
+        self.__id = None
+        self.__name = None
 
-    def information(self):
-        for i in range(1, self.number_s + 1):
-            info_s = {'id': input("Please enter student id: "),
-                      'name': input("Please enter student name: "),
-                      'DoB': input("please enter student's date of birth: ")}
-            self.l_student.append(info_s)
-        return self.l_student
+    def _get_id(self):
+        return self.__id
 
-    def show_info(self):
-        if self.l_student == []:
-            print("No information about students was given")
+    def _get_name(self):
+        return self.__name
+
+    def set_name(self, name):
+        self.__name = name
+
+    def input_information(self):
+        self.__id = input("Please enter ID: ")
+        while (self.validate_id(self.__id) == False):
+            self.__id = input("Invalid ID, Please try again: ")
+        self.__name = input("Please enter Name: ")
+        while (self.validate_name(self.__name) == False):
+            self.__name = input("Invalid Name, Please try again: ")
+
+    def set_information(self, list):
+        info = {'id': self.__id,
+                'name': self.__name}
+        list.append(info)
+        return list
+
+    def show_info(self, list):
+        if list == []:
+            print("No information was given")
         else:
-            print("Students list: ")
-            print(" ")
-            for i in self.l_student:
+            for i in list:
                 print(i)
 
-
-class Course:
-    l_course = []
-
-    def __init__(self, number_c):
-        self.number_c = number_c
-
-    def information(self):
-        for i in range(1, number_c + 1):
-            info_c = {'id': input("Please enter courese id: "),
-                      'name': input("Please enter course name: ")}
-            self.l_course.append(info_c)
-        return self.l_course
-
-    def show_info(self):
-        if self.l_course == []:
-            print("No information about course was given")
+    def validate_name(self, name):
+        if (len((self.__name)) == 0):
+            return False
         else:
-            print("Available course: ")
-            print(" ")
-            for i in self.l_course:
-                print(i)
+            return True
+
+    def validate_id(self, id):
+        if (len((self.__id)) == 0):
+            return False
+        else:
+            return True
+
+
+class Student(Program):
+    def __init__(self):
+        self.__DoB = None
+
+    def _get_DoB(self):
+        return self.__DoB
+
+    def set_DoB(self, DoB):
+        self.__DoB = DoB
+
+    def input_information(self):
+        super().input_information()
+        self.__DoB = input("Please enter Date of Birth of student: ")
+        while (self.validate_DoB(self.__DoB) == False):
+            self.__DoB = input("Invalid Date of Birth, Please try again: ")
+
+    def set_information(self, list):
+        info = {'id': self._Program__id,
+                'name': self._Program__name,
+                'DoB': self.__DoB}
+        list.append(info)
+        return list
+
+    def validate_DoB(self, DoB):
+        if (len((self.__DoB)) == 0):
+            return False
+        else:
+            return True
+
+
+class Course(Program):
+    pass
 
 
 class Mark:
@@ -114,7 +154,6 @@ class Mark:
 
 
 # MAIN
-
 def no_student():
     student_no = int(input("Please enter number of student: "))
     return student_no
@@ -131,6 +170,7 @@ def main():
     while i != 9:
         print(" ")
         print("Finished option: ")
+        op.sort()
         print(op)
         print("Recommend order from 1 to 8")
         print("""
@@ -141,7 +181,7 @@ def main():
         4. Define course information
         5. Input mark of students for a given coursess
         6. Show list of Courses
-        7. Show list of Students
+        7. Show list of students
         8. Show mark of students in a given course
         9.Exit""")
         i = int(input("Choose your action: "))
@@ -152,53 +192,57 @@ def main():
 
         if i == 1:
             number_s = no_student()
-            students = Student(number_s)
+            students = Student()
             op.append(i)
         if i == 2:
             try:
-                students.information()
+                for i in range(1, number_s + 1):
+                    students.input_information()
+                    students.set_information(l_student)
                 op.append(i)
             except:
-                print(
-                    "No number of student was given. Please insert it before try again.")
+                print("No number of students was given. Please insert it before try again.")
         if i == 3:
             number_c = no_course()
-            courses = Course(number_c)
+            courses = Course()
             op.append(i)
         if i == 4:
             try:
-                courses.information()
+                for i in range(1, number_c + 1):
+                    courses.input_information()
+                    courses.set_information(l_course)
                 op.append(i)
             except:
-                print(
-                    "No number of courses was given. Please insert it before try again.")
+                print("No number of courses was given. Please insert it before try again.")
         if i == 5:
-            marked = Mark(students.l_student,
-                          courses.l_course, number_s, number_c)
-            marked.student_mark()
-            op.append(i)
+            if l_course == [] or l_student == []:
+                print("Not enough information about students or courses was given please try again")
+            else:
+                marked = Mark(l_student, l_course, number_s, number_c)
+                marked.student_mark()
+                op.append(i)
         if i == 6:
             try:
-                courses.show_info()
+                courses.show_info(l_course)
                 op.append(i)
             except:
                 print("No information about course was given")
         if i == 7:
             try:
-                students.show_info()
+                students.show_info(l_student)
                 op.append(i)
             except:
-                print("No information about students was given")
+                print("No information about student was given")
         if i == 8:
             try:
                 marked.sh_student_mark()
                 op.append(i)
             except:
-                print("You havent marked anyone!")
-
+                print("You havent marked anyone")
         if i == 9:
             print("Goodbye")
 
 
+# UI
 if __name__ == '__main__':
     main()
