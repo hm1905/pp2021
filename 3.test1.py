@@ -33,14 +33,14 @@ class Program:
         while (self.validate_id(self.__id) == False):
             screen.addstr("Invalid ID, Please try again: ")
             screen.refresh()
-            self.__id = screen.getstr()
+            self.__id = screen.getstr().decode('utf-8')
         screen.addstr("Please enter Name: ")
         screen.refresh()
         self.__name = screen.getstr().decode('utf-8')
         while (self.validate_name(self.__name) == False):
             screen.addstr("Invalid Name, Please try again: ")
             screen.refresh()
-            self.__Name = screen.getstr()
+            self.__Name = screen.getstr().decode('utf-8')
 
     def set_information(self, list):
         info = {'id': self.__id,
@@ -86,7 +86,7 @@ class Student(Program):
         while (self.validate_DoB(self.__DoB) == False):
             screen.addstr("Invalid Date of Birth, Please try again: ")
             screen.refresh()
-            self.__DoB = screen.getstr()
+            self.__DoB = screen.getstr().decode('utf-8')
 
     def set_information(self, list):
         info = {'id': self._Program__id,
@@ -115,11 +115,11 @@ class Course(Program):
         super().input_information()
         screen.addstr("Please enter credit of course: ")
         screen.refresh()
-        self.__Credit = screen.getstr()
+        self.__Credit = screen.getstr().decode('utf-8')
         while (self.validate_Credit(self.__Credit) == False):
             screen.addstr("Invalid number of credit, Please try again: ")
             screen.refresh()
-            self.__Credit = screen.getstr()
+            self.__Credit = screen.getstr().decode('utf-8')
 
     def set_information(self, list):
         info = {'id': self._Program__id,
@@ -152,7 +152,7 @@ class Mark:
             screen.addstr("Available Courses: ")
             screen.addstr(str(self.l_course))
             screen.addstr("Please select one to enter mark<by name>: ")
-            c_name = screen.getstr()
+            c_name = screen.getstr().decode('utf-8')
             while not any(i['name'] == c_name for i in self.l_course):
                 screen.addstr("Please try again: ")
                 screen.addstr("Please select one to enter mark<by name>: ")
@@ -161,28 +161,28 @@ class Mark:
             count = 0
             while i == str(1):
                 screen.addstr("Student list: ")
-                #screen.addstr(self.l_student)
+                screen.addstr(str(self.l_student))
                 screen.addstr("Please select which student to mark<by name>: ")
-                s_name = screen.getstr()
+                s_name = screen.getstr().decode('utf-8')
                 while not any(i['name'] == s_name for i in self.l_student):
                     screen.addstr("Please try again: ")
-                    s_name = screen.getstr()
+                    s_name = screen.getstr().decode('utf-8')
                 screen.addstr("The mark: ")
-                mk = float(screen.getstr())
+                mk = float(screen.getstr().decode('utf-8'))
                 mk = math.floor(mk)
                 self.mark_list.append(
                     {'Subject': c_name, 'Name': s_name, 'Mark': mk})
                 count += 1
                 if count >= self.number_s:
-                    screen.addstr("You have entered mark for every students for " + c_name)
+                    screen.addstr("You have entered mark for every students for " + str(c_name))
                 screen.addstr(
                     "Do you wish to continue marking the student<1:Yes, 0:No>: ")
-                i = screen.getstr()
+                i = screen.getstr().decode('utf-8')
                 while not (i == str(1) or i == str(0)):
                     screen.addstr("Please enter only 1 or 0")
                     screen.addstr(
                         "Do you wish to continue marking the student<1:Yes, 0:No>: ")
-                    i = screen.getstr()
+                    i = screen.getstr().decode('utf-8')
             return self.mark_list
 
     def sh_student_mark(self):
@@ -192,14 +192,14 @@ class Mark:
         for i in self.mark_list:
             if i['Subject'] not in mk_s:
                 mk_s.append(i['Subject'])
-        #print(mk_s)
+        screen.addstr(str(mk_s))
         screen.addstr("Please select which subject you want to see: ")
-        name = screen.getstr()
+        name = screen.getstr().decode('utf-8')
         #print(" ")
         while not any(i['Subject'] == name for i in self.mark_list):
-            screen.addstr("Please try again. You might havent marked " + name + " yet")
+            screen.addstr("Please try again. You might havent marked " + str(name) + " yet")
             screen.addstr("Please select which subject you want to see: ")
-            name = screen.getstr()
+            name = screen.getstr().decode('utf-8')
             #print(" ")
         for i in self.mark_list:
             if i['Subject'] == name:
@@ -329,6 +329,10 @@ def main(stdscr):
             stdscr.refresh()
             curses.echo()
             students.show_info(l_student)
+        elif (key == curses.KEY_ENTER or key in [10,13]) and current_row == 7:
+            stdscr.refresh()
+            curses.echo()
+            marked.sh_student_mark()
         elif (key == curses.KEY_ENTER or key in [10,13]) and current_row == 9:
             break
         print_menu(stdscr, current_row)
