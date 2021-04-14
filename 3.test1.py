@@ -3,12 +3,15 @@ import numpy
 import curses
 import time
 from operator import itemgetter
-
+import tabulate
 
 # VARIABLES.
-l_course = [{'id': '11','name':  'math', 'Credit': 3}, {'id': '12','name':  'python', 'Credit': 4}]
-l_student = [{'id': '1','name':  'joe', 'DoB': '12/12'}, {'id': '2','name':  'beth', 'DoB': '11/12'}]
-mark_list = [{'Subject': 'math','Name': 'joe', 'Mark': 19}, {'Subject': 'python','Name': 'joe', 'Mark': 20}, {'Subject': 'python','Name': 'beth', 'Mark': 12}]
+l_course = [{'id': '11', 'name':  'math', 'Credit': 3},
+            {'id': '12', 'name':  'python', 'Credit': 4}]
+l_student = [{'id': '1', 'name':  'joe', 'DoB': '12/12'},
+             {'id': '2', 'name':  'beth', 'DoB': '11/12'}]
+mark_list = [{'Subject': 'math', 'Name': 'joe', 'Mark': 19}, {'Subject': 'python',
+                                                              'Name': 'joe', 'Mark': 20}, {'Subject': 'python', 'Name': 'beth', 'Mark': 12}]
 l_student_gpa_included = []
 
 # CLASS CREATION
@@ -51,9 +54,8 @@ class Program:
         return list
 
     def show_info(self, list):
-        for i in list:
-            screen.addstr(str(i) + '\n')
-            screen.refresh()
+        screen.addstr(tabulate.tabulate(list, headers="keys"))
+        screen.refresh()
         time.sleep(2)
 
     def validate_name(self, name):
@@ -72,7 +74,6 @@ class Program:
 class Student(Program):
     def __init__(self):
         self.__DoB = None
-
 
     def _get_DoB(self):
         return self.__DoB
@@ -102,8 +103,6 @@ class Student(Program):
             return False
         else:
             return True
-
-
 
 
 class Course(Program):
@@ -149,7 +148,8 @@ class Mark:
 
     def student_mark(self):
         if self.l_course == [] or self.l_student == []:
-            screen.addstr("Not enough information about students or courses was given please try again" )
+            screen.addstr(
+                "Not enough information about students or courses was given please try again")
             screeb.refresh()
         else:
             screen.addstr("Available Courses: " + '\n')
@@ -177,7 +177,8 @@ class Mark:
                     {'Subject': c_name, 'Name': s_name, 'Mark': mk})
                 count += 1
                 if count >= self.number_s:
-                    screen.addstr("You have entered mark for every students for " + str(c_name) + '\n')
+                    screen.addstr(
+                        "You have entered mark for every students for " + str(c_name) + '\n')
                 screen.addstr(
                     "Do you wish to continue marking the student<1:Yes, 0:No>: " + '\n')
                 i = screen.getstr().decode('utf-8')
@@ -199,7 +200,8 @@ class Mark:
         screen.addstr("Please select which subject you want to see: ")
         name = screen.getstr().decode('utf-8')
         while not any(i['Subject'] == name for i in self.mark_list):
-            screen.addstr("Please try again. You might havent marked " + str(name) + " yet" + '\n')
+            screen.addstr(
+                "Please try again. You might havent marked " + str(name) + " yet" + '\n')
             screen.addstr("Please select which subject you want to see: ")
             name = screen.getstr().decode('utf-8')
         for i in self.mark_list:
@@ -207,7 +209,7 @@ class Mark:
                 show.append({'Name': i['Name'], 'Mark': i['Mark']})
         for i in show:
             for keys, values in i.items():
-                screen.addstr(str(keys)+': '+str(values))
+                screen.addstr(str(keys) + ': ' + str(values))
                 screen.refresh()
             time.sleep(1)
 
@@ -234,6 +236,7 @@ class Mark:
                     if (y['name'] == i['Subject']):
                         total_credit = numpy.append(total_credit, y['Credit'])
         gpa = numpy.dot(total_mark, total_credit) / numpy.sum(total_credit)
+        gpa = math.floor(gpa)
         screen.addstr(str(gpa))
         screen.refresh()
         time.sleep(2)
@@ -247,22 +250,32 @@ class Mark:
                     total_mark = numpy.append(total_mark, i['Mark'])
                     for y in l_course:
                         if (y['name'] == i['Subject']):
-                            total_credit = numpy.append(total_credit, y['Credit'])
+                            total_credit = numpy.append(
+                                total_credit, y['Credit'])
             gpa = numpy.dot(total_mark, total_credit) / numpy.sum(total_credit)
+            gpa = math.floor(gpa)
             info = {'id': z['id'],
                     'name': z['name'],
                     'DoB': z['DoB'],
                     'GPA': gpa}
             l_student_gpa_included.append(info)
-
-    def show_info(self):
-        l_student_gpa_included_sorted = []
-        l_student_gpa_included_sorted = sorted(l_student_gpa_included, key=itemgetter('GPA'), reverse = True)
-        for i in l_student_gpa_included_sorted:
-            screen.addstr(str(i) + '\n')
-            screen.refresh()
+        screen.addstr("GPA updated")
+        screen.refresh()
         time.sleep(2)
 
+    def show_info(self):
+        if l_student_gpa_included == []:
+            screen.addstr('You havent calculate all of students GPA')
+            screen.refresh()
+            time.sleep(2)
+        else:
+            l_student_gpa_included_sorted = []
+            l_student_gpa_included_sorted = sorted(
+                l_student_gpa_included, key=itemgetter('GPA'), reverse=True)
+            screen.addstr(tabulate.tabulate(
+                l_student_gpa_included_sorted, headers="keys"))
+            screen.refresh()
+            time.sleep(2)
 
 
 # MAIN
@@ -279,25 +292,28 @@ def no_course():
     course_no = int(screen.getstr())
     return course_no
 
+
 menu = ['Define number of student in a class',
         'Create new student information',
-        'Make number of availabe Courses',
-        'Define course information',
+        'Define number of availabe Courses',
+        'Create course information',
         'Input mark of students for a given coursess',
         'Show list of Courses',
         'Show list of Students',
         'Show mark of students in a given course',
-        'Show student GPA',
+        'Show selected student GPA',
+        'Calculate GPA of all students',
         'Show list of Students with GPA',
         'Exit']
+
 
 def print_menu(stdscr, selected):
     stdscr.clear()
     h, w = stdscr.getmaxyx()
 
     for idx, row in enumerate(menu):
-        x = w//2 - len(row)//2
-        y = h//2 - len(menu)//2 + idx
+        x = w // 2 - len(row) // 2
+        y = h // 2 - len(menu) // 2 + idx
         if idx == selected:
             stdscr.attron(curses.color_pair(1))
             stdscr.addstr(y, x, row)
@@ -306,12 +322,14 @@ def print_menu(stdscr, selected):
             stdscr.addstr(y, x, row)
     stdscr.refresh()
 
+
 def main(stdscr):
     number_c = 0
     number_s = 0
     students = Student()
     courses = Course()
-    marked = Mark(l_student, l_course, number_s, number_c, mark_list, l_student_gpa_included)
+    marked = Mark(l_student, l_course, number_s, number_c,
+                  mark_list, l_student_gpa_included)
     global screen
     curses.curs_set(0)
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
@@ -328,51 +346,50 @@ def main(stdscr):
             current_row -= 1
         elif key == curses.KEY_DOWN and current_row < len(menu) - 1:
             current_row += 1
-        elif (key == curses.KEY_ENTER or key in [10,13]) and current_row == 0:
+        elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 0:
             stdscr.refresh()
             curses.echo()
             number_s = no_student()
-        elif (key == curses.KEY_ENTER or key in [10,13]) and current_row == 1:
+        elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 1:
             stdscr.refresh()
             curses.echo()
             for i in range(1, number_s + 1):
                 students.input_information()
                 students.set_information(l_student)
-        elif (key == curses.KEY_ENTER or key in [10,13]) and current_row == 2:
+        elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 2:
             stdscr.refresh()
             curses.echo()
             number_c = no_course()
-        elif (key == curses.KEY_ENTER or key in [10,13]) and current_row == 3:
+        elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 3:
             stdscr.refresh()
             curses.echo()
             for i in range(1, number_c + 1):
                 courses.input_information()
                 courses.set_information(l_course)
-        elif (key == curses.KEY_ENTER or key in [10,13]) and current_row == 4:
+        elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 4:
             stdscr.refresh()
             marked.student_mark()
-        elif (key == curses.KEY_ENTER or key in [10,13]) and current_row == 5:
+        elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 5:
             stdscr.refresh()
             students.show_info(l_course)
-        elif (key == curses.KEY_ENTER or key in [10,13]) and current_row == 6:
+        elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 6:
             stdscr.refresh()
             students.show_info(l_student)
-        elif (key == curses.KEY_ENTER or key in [10,13]) and current_row == 7:
+        elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 7:
             stdscr.refresh()
             marked.sh_student_mark()
-        elif (key == curses.KEY_ENTER or key in [10,13]) and current_row == 8:
+        elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 8:
             stdscr.refresh()
             marked.average_gpa()
-        elif (key == curses.KEY_ENTER or key in [10,13]) and current_row == 9:
+        elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 9:
             stdscr.refresh()
             marked.all_student_gpa()
+        elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 10:
             marked.show_info()
-        elif (key == curses.KEY_ENTER or key in [10,13]) and current_row == 10:
+        elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 11:
             break
         print_menu(stdscr, current_row)
         stdscr.refresh()
-
-
 
 
 # UI
