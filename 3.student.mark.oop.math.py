@@ -213,16 +213,14 @@ class Mark:
         while not any(i['Subject'] == name for i in self.mark_list):
             screen.addstr(
                 "Please try again. You might havent marked " + str(name) + " yet" + '\n')
-            screen.addstr("Please select which subject you want to see: ")
+            screen.addstr("Please select which subject you want to see: " + '\n')
             name = screen.getstr().decode('utf-8')
         for i in self.mark_list:
             if i['Subject'] == name:
                 show.append({'Name': i['Name'], 'Mark': i['Mark']})
-        for i in show:
-            for keys, values in i.items():
-                screen.addstr(str(keys) + ': ' + str(values))
-                screen.refresh()
-            time.sleep(1)
+        screen.addstr(tabulate.tabulate(show ,headers = "keys"))
+        screen.refresh()
+        time.sleep(2)
 
     def average_gpa(self):
         total_mark = numpy.array([])
