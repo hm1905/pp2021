@@ -5,14 +5,24 @@ import time
 from operator import itemgetter
 import tabulate
 import datetime
-from .Program import Program
 date_format = '%d-%m-%Y'
 
 screen = curses.initscr()
 
-class Student(Program):
+class Student:
     def __init__(self):
         self.__DoB = None
+        self.__id = None
+        self.__name = None
+
+    def _get_id(self):
+        return self.__id
+
+    def _get_name(self):
+        return self.__name
+
+    def set_name(self, name):
+        self.__name = name
 
     def _get_DoB(self):
         return self.__DoB
@@ -20,8 +30,21 @@ class Student(Program):
     def set_DoB(self, DoB):
         self.__DoB = DoB
 
-    def input_information(self):
-        super().input_information()
+    def input_information_student(self):
+        screen.addstr("Please enter ID: ")
+        screen.refresh()
+        self.__id = screen.getstr().decode('utf-8')
+        while (self.validate_id(self.__id) == False):
+            screen.addstr("Invalid ID, Please try again: ")
+            screen.refresh()
+            self.__id = screen.getstr().decode('utf-8')
+        screen.addstr("Please enter Name: ")
+        screen.refresh()
+        self.__name = screen.getstr().decode('utf-8')
+        while (self.validate_name(self.__name) == False):
+            screen.addstr("Invalid Name, Please try again: ")
+            screen.refresh()
+            self.__Name = screen.getstr().decode('utf-8')
         screen.addstr("Please enter Date of Birth of student<format:d-m-Y>: ")
         screen.refresh()
         self.__DoB = screen.getstr().decode('utf-8')
@@ -30,16 +53,21 @@ class Student(Program):
             screen.refresh()
             self.__DoB = screen.getstr().decode('utf-8')
 
-    def set_information(self, list):
-        info = {'id': self._Program__id,
-                'name': self._Program__name,
-                'DoB': self.__DoB}
-        list.append(info)
-        return list
-
     def validate_DoB(self, DoB):
         try:
             datetime.datetime.strptime(self.__DoB, date_format)
             return True
         except:
             return False
+
+    def validate_name(self, name):
+        if (len((self.__name)) == 0):
+            return False
+        else:
+            return True
+
+    def validate_id(self, id):
+        if (len((self.__id)) == 0):
+            return False
+        else:
+            return True

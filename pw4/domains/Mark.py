@@ -17,6 +17,13 @@ class Mark:
         self.mark_list = mark_list
         self.l_student_gpa_included = l_student_gpa_included
 
+    def validate_mark(self, mark):
+        try:
+            if (mark != None and float(mark) in numpy.arange(0, 21, 0.1)):
+                return True
+        except:
+            return False
+
     def student_mark(self):
         if self.l_course == [] or self.l_student == []:
             screen.addstr(
@@ -41,20 +48,14 @@ class Mark:
                 while not any(i['name'] == s_name for i in self.l_student):
                     screen.addstr("Please try again: ")
                     s_name = screen.getstr().decode('utf-8')
-
                 screen.addstr("Mark<out of 20>: ")
                 mk = None
-                while mk == None:
-                    try:
-                        mk = float(screen.getstr().decode('utf-8'))
-                        if mk not in numpy.arange(0, 21, 0.1):
-                            screen.addstr("Invalid mark. Please try again: " + '\n')
-                            screen.addstr("Mark<out of 20>: ")
-                            mk = float(screen.getstr().decode('utf-8'))
-                    except:
-                        screen.addstr("Invalid input. Please try again: ")
-
-                mk = math.floor(mk)
+                mk = screen.getstr().decode('utf-8')
+                while (self.validate_mark(mk) == False):
+                    screen.addstr("Invalid mark. Please try again: " + '\n')
+                    screen.addstr("Mark<out of 20>: ")
+                    mk = float(screen.getstr().decode('utf-8'))
+                mk = math.floor(float(mk))
                 self.mark_list.append(
                     {'Subject': c_name, 'Name': s_name, 'Mark': mk})
                 count += 1
@@ -70,28 +71,6 @@ class Mark:
                         "Do you wish to continue marking the student<1:Yes, 0:No>: " + '\n')
                     i = screen.getstr().decode('utf-8')
             return self.mark_list
-
-    def sh_student_mark(self):
-        show = []
-        screen.addstr("Marked subject:" + '\n')
-        mk_s = []
-        for i in self.mark_list:
-            if i['Subject'] not in mk_s:
-                mk_s.append(i['Subject'])
-        screen.addstr(str(mk_s) + '\n')
-        screen.addstr("Please select which subject you want to see: ")
-        name = screen.getstr().decode('utf-8')
-        while not any(i['Subject'] == name for i in self.mark_list):
-            screen.addstr(
-                "Please try again. You might havent marked " + str(name) + " yet" + '\n')
-            screen.addstr("Please select which subject you want to see: " + '\n')
-            name = screen.getstr().decode('utf-8')
-        for i in self.mark_list:
-            if i['Subject'] == name:
-                show.append({'Name': i['Name'], 'Mark': i['Mark']})
-        screen.addstr(tabulate.tabulate(show ,headers = "keys"))
-        screen.refresh()
-        time.sleep(2)
 
     def average_gpa(self):
         total_mark = numpy.array([])
@@ -112,7 +91,7 @@ class Mark:
         for i in self.mark_list:
             if i['Name'] == name:
                 total_mark = numpy.append(total_mark, i['Mark'])
-                for y in l_course:
+                for y in self.l_course:
                     if (y['name'] == i['Subject']):
                         total_credit = numpy.append(total_credit, y['Credit'])
         gpa = numpy.dot(total_mark, total_credit) // numpy.sum(total_credit)
@@ -127,7 +106,7 @@ class Mark:
             for i in self.mark_list:
                 if i['Name'] == z['name']:
                     total_mark = numpy.append(total_mark, float(i['Mark']))
-                    for y in l_course:
+                    for y in self.l_course:
                         if (y['name'] == i['Subject']):
                             total_credit = numpy.append(
                                 total_credit, float(y['Credit']))
@@ -137,21 +116,7 @@ class Mark:
                     'name': z['name'],
                     'DoB': z['DoB'],
                     'GPA': gpa}
-            l_student_gpa_included.append(info)
+            self.l_student_gpa_included.append(info)
         screen.addstr("GPA updated")
         screen.refresh()
         time.sleep(2)
-
-    def show_info(self):
-        if l_student_gpa_included == []:
-            screen.addstr('You havent calculate all of students GPA')
-            screen.refresh()
-            time.sleep(2)
-        else:
-            l_student_gpa_included_sorted = []
-            l_student_gpa_included_sorted = sorted(
-                l_student_gpa_included, key=itemgetter('GPA'), reverse=True)
-            screen.addstr(tabulate.tabulate(
-                l_student_gpa_included_sorted, headers="keys"))
-            screen.refresh()
-            time.sleep(2)
