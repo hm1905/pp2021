@@ -7,7 +7,6 @@ import tabulate
 import datetime
 date_format = '%d-%m-%Y'
 
-screen = curses.initscr()
 
 class Student:
     def __init__(self):
@@ -29,29 +28,6 @@ class Student:
 
     def set_DoB(self, DoB):
         self.__DoB = DoB
-
-    def input_information_student(self):
-        screen.addstr("Please enter ID: ")
-        screen.refresh()
-        self.__id = screen.getstr().decode('utf-8')
-        while (self.validate_id(self.__id) == False):
-            screen.addstr("Invalid ID, Please try again: ")
-            screen.refresh()
-            self.__id = screen.getstr().decode('utf-8')
-        screen.addstr("Please enter Name: ")
-        screen.refresh()
-        self.__name = screen.getstr().decode('utf-8')
-        while (self.validate_name(self.__name) == False):
-            screen.addstr("Invalid Name, Please try again: ")
-            screen.refresh()
-            self.__Name = screen.getstr().decode('utf-8')
-        screen.addstr("Please enter Date of Birth of student<format:d-m-Y>: ")
-        screen.refresh()
-        self.__DoB = screen.getstr().decode('utf-8')
-        while (self.validate_DoB(self.__DoB) == False):
-            screen.addstr("Invalid Date of Birth, Please try again: ")
-            screen.refresh()
-            self.__DoB = screen.getstr().decode('utf-8')
 
     def validate_DoB(self, DoB):
         try:

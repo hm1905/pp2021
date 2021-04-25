@@ -33,9 +33,24 @@ def print_menu(stdscr, selected):
     stdscr.refresh()
 
 def show_info(list):
-    screen.addstr(tabulate.tabulate(list, headers="keys"))
-    screen.refresh()
-    time.sleep(2)
+    if list == []:
+        screen.addstr('No information was given')
+        screen.refresh()
+        time.sleep(2)
+    else:
+        if any('GPA' in i for i in list):
+            l_student_gpa_included_sorted = []
+            l_student_gpa_included_sorted = sorted(
+                list, key=itemgetter('GPA'), reverse=True)
+            screen.addstr(tabulate.tabulate(
+                l_student_gpa_included_sorted, headers="keys"))
+            screen.refresh()
+            time.sleep(2)
+        else:
+            screen.addstr(tabulate.tabulate(list, headers="keys"))
+            screen.refresh()
+            time.sleep(2)
+
 
 def show_student_mark(list):
     show = []
@@ -58,18 +73,3 @@ def show_student_mark(list):
     screen.addstr(tabulate.tabulate(show ,headers = "keys"))
     screen.refresh()
     time.sleep(2)
-
-
-def show_info_gpa(list):
-    if list == []:
-        screen.addstr('You havent calculate all of students GPA')
-        screen.refresh()
-        time.sleep(2)
-    else:
-        l_student_gpa_included_sorted = []
-        l_student_gpa_included_sorted = sorted(
-            list, key=itemgetter('GPA'), reverse=True)
-        screen.addstr(tabulate.tabulate(
-            l_student_gpa_included_sorted, headers="keys"))
-        screen.refresh()
-        time.sleep(2)

@@ -86,7 +86,7 @@ def main(stdscr):
             stdscr.refresh()
             marked.all_student_gpa()
         elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 10:
-            output.show_info_gpa(l_student_gpa_included)
+            output.show_info(l_student_gpa_included)
         elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 11:
             break
         output.print_menu(stdscr, current_row)
