@@ -59,7 +59,7 @@ class Mark:
                 self.mark_list.append(
                     {'Subject': c_name, 'Name': s_name, 'Mark': mk})
                 count += 1
-                if count >= self.number_s:
+                if count >= len(self.l_student):
                     screen.addstr(
                         "You have entered mark for every students for " + str(c_name) + '\n')
                 screen.addstr(
