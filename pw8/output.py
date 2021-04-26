@@ -36,7 +36,7 @@ def show_info(list):
     if list == []:
         screen.addstr('No information was given')
         screen.refresh()
-        time.sleep(2)
+        screnn.getch()
     else:
         if any('GPA' in i for i in list):
             l_student_gpa_included_sorted = []
@@ -45,12 +45,11 @@ def show_info(list):
             screen.addstr(tabulate.tabulate(
                 l_student_gpa_included_sorted, headers="keys"))
             screen.refresh()
-            time.sleep(2)
+            screnn.getch()
         else:
             screen.addstr(tabulate.tabulate(list, headers="keys"))
             screen.refresh()
-            time.sleep(2)
-
+            screen.getch()
 
 def show_student_mark(list):
     show = []
@@ -73,4 +72,4 @@ def show_student_mark(list):
             show.append({'Name': i['Name'], 'Mark': i['Mark']})
     screen.addstr(tabulate.tabulate(show ,headers = "keys"))
     screen.refresh()
-    time.sleep(2)
+    screen.getch()
