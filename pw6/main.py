@@ -42,6 +42,8 @@ def main(stdscr):
                 mark_list = pickle.load(open('marks.txt','rb'))
         os.remove('students.dat')
 
+    marked = Mark(l_student, l_course, mark_list, l_student_gpa_included)
+
     number_c = 0
     number_s = 0
     input = Input()
@@ -87,8 +89,6 @@ def main(stdscr):
                 f.write(pickle.dumps(l_course))
         elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 4:
             stdscr.refresh()
-            marked = Mark(l_student, l_course, number_s, number_c,
-                          mark_list, l_student_gpa_included)
             marked.student_mark()
         elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 5:
             stdscr.refresh()

@@ -60,6 +60,7 @@ def show_student_mark(list):
         if i['Subject'] not in mk_s:
             mk_s.append(i['Subject'])
     screen.addstr(str(mk_s) + '\n')
+    curses.echo()
     screen.addstr("Please select which subject you want to see: ")
     name = screen.getstr().decode('utf-8')
     while not any(i['Subject'] == name for i in list):
