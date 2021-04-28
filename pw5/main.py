@@ -13,6 +13,7 @@ mark_list = []
 l_student_gpa_included = []
 
 
+
 # MAIN
 def no_student():
     screen.addstr("Please enter number of student: ")
@@ -46,6 +47,8 @@ def main(stdscr):
     number_c = 0
     number_s = 0
     input = Input()
+    marked = Mark(l_student, l_course,
+                  mark_list, l_student_gpa_included)
     global screen
     curses.curs_set(0)
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
@@ -88,9 +91,9 @@ def main(stdscr):
                 f.write(json.dumps(l_course))
         elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 4:
             stdscr.refresh()
-            marked = Mark(l_student, l_course, number_s, number_c,
-                          mark_list, l_student_gpa_included)
             marked.student_mark()
+            with open('marks.txt', 'w') as f:
+                f.write(json.dumps(mark_list))
         elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 5:
             stdscr.refresh()
             output.show_info(l_course)

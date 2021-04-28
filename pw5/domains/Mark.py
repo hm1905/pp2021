@@ -9,11 +9,9 @@ screen = curses.initscr()
 
 class Mark:
 
-    def __init__(self, l_student, l_course, number_s, number_c, mark_list, l_student_gpa_included):
+    def __init__(self, l_student, l_course, mark_list, l_student_gpa_included):
         self.l_student = l_student
         self.l_course = l_course
-        self.number_s = number_s
-        self.number_c = number_c
         self.mark_list = mark_list
         self.l_student_gpa_included = l_student_gpa_included
 
@@ -30,46 +28,51 @@ class Mark:
                 "Not enough information about students or courses was given please try again")
             screen.refresh()
         else:
-            screen.addstr("Available Courses: " + '\n')
-            screen.addstr(str(self.l_course) + '\n')
-            screen.addstr("Please select one to enter mark<by name>: ")
-            c_name = screen.getstr().decode('utf-8')
-            while not any(i['name'] == c_name for i in self.l_course):
-                screen.addstr("Please try again: " + '\n')
+            command = "run"
+            while command != "exit":
+                screen.addstr("Available Courses: " + '\n')
+                screen.addstr(str(self.l_course) + '\n')
                 screen.addstr("Please select one to enter mark<by name>: ")
-                c_name = screen.getstr()
-            i = str(1)
-            count = 0
-            while i == str(1):
-                screen.addstr("Student list: " + '\n')
-                screen.addstr(str(self.l_student) + '\n')
-                screen.addstr("Please select which student to mark<by name>: ")
-                s_name = screen.getstr().decode('utf-8')
-                while not any(i['name'] == s_name for i in self.l_student):
-                    screen.addstr("Please try again: ")
+                c_name = screen.getstr().decode('utf-8')
+                while not any(i['name'] == c_name for i in self.l_course):
+                    screen.addstr("Please try again: " + '\n')
+                    screen.addstr("Please select one to enter mark<by name>: ")
+                    c_name = screen.getstr().decode('utf-8')
+                i = str(1)
+                count = 0
+                while i == str(1):
+                    screen.addstr("Student list: " + '\n')
+                    screen.addstr(str(self.l_student) + '\n')
+                    screen.addstr("Please select which student to mark<by name>: ")
                     s_name = screen.getstr().decode('utf-8')
-                screen.addstr("Mark<out of 20>: ")
-                mk = None
-                mk = screen.getstr().decode('utf-8')
-                while (self.validate_mark(mk) == False):
-                    screen.addstr("Invalid mark. Please try again: " + '\n')
+                    while not any(i['name'] == s_name for i in self.l_student):
+                        screen.addstr("Please try again: ")
+                        s_name = screen.getstr().decode('utf-8')
                     screen.addstr("Mark<out of 20>: ")
-                    mk = float(screen.getstr().decode('utf-8'))
-                mk = math.floor(float(mk))
-                self.mark_list.append(
-                    {'Subject': c_name, 'Name': s_name, 'Mark': mk})
-                count += 1
-                if count >= len(self.l_student):
+                    mk = None
+                    mk = screen.getstr().decode('utf-8')
+                    while (self.validate_mark(mk) == False):
+                        screen.addstr("Invalid mark. Please try again: " + '\n')
+                        screen.addstr("Mark<out of 20>: ")
+                        mk = float(screen.getstr().decode('utf-8'))
+                    mk = math.floor(float(mk))
+                    self.mark_list.append(
+                        {'Subject': c_name, 'Name': s_name, 'Mark': mk})
+                    count += 1
+                    if count >= len(self.l_student):
+                        screen.addstr(
+                            "You have entered mark for every students for " + str(c_name) + '\n')
                     screen.addstr(
-                        "You have entered mark for every students for " + str(c_name) + '\n')
-                screen.addstr(
-                    "Do you wish to continue marking the student<1:Yes, 0:No>: ")
-                i = screen.getstr().decode('utf-8')
-                while not (i == str(1) or i == str(0)):
-                    screen.addstr("Please enter only 1 or 0" + '\n')
-                    screen.addstr(
-                        "Do you wish to continue marking the student<1:Yes, 0:No>: " + '\n')
+                        "Do you wish to continue marking the student<1:Yes, 0:No>: ")
                     i = screen.getstr().decode('utf-8')
+                    while not (i == str(1) or i == str(0)):
+                        screen.addstr("Please enter only 1 or 0" + '\n')
+                        screen.addstr(
+                            "Do you wish to continue marking the student<1:Yes, 0:No>: " + '\n')
+                        i = screen.getstr().decode('utf-8')
+                screen.addstr("Do you wish to continue marking<run/exit>: ")
+                command = screen.getstr().decode('utf-8')
+                screen.refresh()
             return self.mark_list
 
     def average_gpa(self):
