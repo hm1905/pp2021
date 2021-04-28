@@ -92,6 +92,8 @@ def main(stdscr):
         elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 4:
             stdscr.refresh()
             marked.student_mark()
+            with open('marks.txt', 'wb') as f:
+                f.write(pickle.dumps(mark_list))
         elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 5:
             stdscr.refresh()
             output.show_info(l_course)
@@ -101,8 +103,6 @@ def main(stdscr):
         elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 7:
             stdscr.refresh()
             output.show_student_mark(mark_list)
-            with open('marks.txt', 'wb') as f:
-                f.write(pickle.dumps(mark_list))
         elif (key == curses.KEY_ENTER or key in [10, 13]) and current_row == 8:
             stdscr.refresh()
             marked.average_gpa()
