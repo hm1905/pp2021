@@ -70,10 +70,12 @@ class Mark:
                         screen.addstr(
                             "Do you wish to continue marking the student<1:Yes, 0:No>: " + '\n')
                         i = screen.getstr().decode('utf-8')
+                    screen.clear()
                 screen.addstr("Do you wish to continue marking<run/exit>: ")
                 command = screen.getstr().decode('utf-8')
                 screen.refresh()
             return self.mark_list
+            screen.clear()
 
     def average_gpa(self):
         total_mark = numpy.array([])
@@ -120,6 +122,10 @@ class Mark:
                     'DoB': z['DoB'],
                     'GPA': gpa}
             self.l_student_gpa_included.append(info)
-        screen.addstr("GPA updated")
+        h, w = screen.getmaxyx()
+        message = "GPA updated"
+        x = w // 2 - len(message) // 2
+        y = h // 2
+        screen.addstr(y, x, message)
         screen.refresh()
         time.sleep(2)

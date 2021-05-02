@@ -26,6 +26,7 @@ class Input(Student, Course):
             screen.addstr("Invalid Date of Birth, Please try again: ")
             screen.refresh()
             self._Student__DoB = screen.getstr().decode('utf-8')
+        screen.clear()
 
     def input_information_course(self):
         screen.addstr("Please enter ID: ")
@@ -49,6 +50,7 @@ class Input(Student, Course):
             screen.addstr("Invalid number of credit, Please try again: ")
             screen.refresh()
             self._Course__Credit = int(screen.getstr().decode('utf-8'))
+        screen.clear()
 
     def set_information_student(self, list):
         info = {'id': self._Student__id,
