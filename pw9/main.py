@@ -40,27 +40,31 @@ def main():
     input_show_student_gpa_b = Button(frame1, text="Show selected student GPA", command=lambda: marked.average_gpa())
     input_calculate_all_gpa = Button(frame1, text="Calculate all student GPA", command=lambda: marked.all_student_gpa())
     input_show_student_bygpa_b = Button(frame1, text="Show list of Students with GPA", command=lambda: output.show_info(l_student_gpa_included))
+    input_clear_screen = Button(frame1, text="Clear status bar", command=lambda: clear_status())
     input_exit_b = Button(frame1, text="Exit", command=root.quit)
 
-    input_information_student_b.pack()
-    input_information_course_b.pack()
-    input_mark_b.pack()
-    input_show_course_b.pack()
-    input_show_student_b.pack()
-    input_show_mark_by_course_b.pack()
-    input_show_student_gpa_b.pack()
-    input_calculate_all_gpa.pack()
-    input_show_student_bygpa_b.pack()
-    input_exit_b.pack()
+    input_information_student_b.pack(expand=True, fill=BOTH)
+    input_information_course_b.pack(expand=True, fill=BOTH)
+    input_mark_b.pack(expand=True, fill=BOTH)
+    input_show_course_b.pack(expand=True, fill=BOTH)
+    input_show_student_b.pack(expand=True, fill=BOTH)
+    input_show_mark_by_course_b.pack(expand=True, fill=BOTH)
+    input_show_student_gpa_b.pack(expand=True, fill=BOTH)
+    input_calculate_all_gpa.pack(expand=True, fill=BOTH)
+    input_show_student_bygpa_b.pack(expand=True, fill=BOTH)
+    input_clear_screen.pack(expand=True, fill=BOTH)
+    input_exit_b.pack(expand=True, fill=BOTH)
 
 
 
 
 # UI
 if __name__ == '__main__':
-
-    frame1.pack(fill=BOTH, side="left")
-    frame2.pack(side="right")
+    frame2.pack_propagate(0)
+    frame2.pack(fill=BOTH, side="right")
+    frame1.pack(fill=BOTH, side="top")
+    frame3.pack_propagate(0)
+    frame3.pack(fill=BOTH, side="bottom")
     main()
     root.mainloop()
 

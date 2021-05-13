@@ -35,9 +35,7 @@ class Mark:
                     messagebox.showinfo("Update", "Update SUCCESSFUL")
 
             def open():
-                top = Toplevel()
-                top.title("List of student")
-                list = Label(top, text=tabulate.tabulate(self.l_student, headers="keys")).pack()
+                list = Label(frame3, text=tabulate.tabulate(self.l_student, headers="keys")).pack()
 
             clear_frame()
             course_op=[]
